@@ -1,6 +1,7 @@
 # Registro de decisões arquiteturais
 
-**Versão documental:** 1.3
+**Versão documental:** 1.3  
+**Data:** 2026-11-15
 
 | ADR | Decisão | Estado |
 |---|---|---|

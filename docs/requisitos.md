@@ -1,7 +1,8 @@
 # Visão do produto e requisitos
 
 **Projeto:** OSCE Trainer  
-**Versão documental:** 1.1  
+**Versão documental:** 1.2  
+**Data:** 2026-11-15  
 **Status:** proposta revisada
 
 ## 1. Visão
@@ -79,13 +80,13 @@ Aplicação web educacional para treinamento individual de estações OSCE. Estu
 
 ### Procedência e versionamento
 
-> **Nota de numeração:** Os identificadores RF-037 a RF-051 pertenciam a uma versão anterior da especificação e não foram redefinidos nesta revisão. A sequência foi mantida a partir de RF-052 para preservar rastreabilidade com artefatos anteriores.
+> **Nota de numeração:** Os identificadores **RF-037 a RF-051** e **RNF-013 a RNF-015** não estão definidos na versão atual da especificação. O histórico do repositório não contém versões anteriores desses documentos (a documentação foi consolidada no commit `6247687`). Não é possível determinar se esses identificadores correspondiam a requisitos removidos, renumerados ou esquecidos. A numeração atual é mantida sem preenchimento das lacunas para preservar rastreabilidade. **Pendência:** confirmar origem das lacunas com a equipe responsável pela especificação anterior.
 
-- **RF-052:** permitir definir origem do conteúdo.
-- **RF-053:** registrar referência do material original.
-- **RF-054:** registrar status de validação clínica e observações.
+- **RF-052:** permitir definir origem do conteúdo (`tipo_origem`).
+- **RF-053:** registrar referência do material original (`referencia_origem`).
+- **RF-054:** registrar status de validação clínica e observações (`estado_validacao_clinica`, `observacoes_validacao`).
 - **RF-055:** criar nova versão de uma estação.
-- **RF-056:** preservar versões utilizadas anteriormente.
+- **RF-056:** preservar versões utilizadas anteriormente (imutabilidade).
 - **RF-057:** visualizar a configuração exata usada em uma tentativa.
 - **RF-058:** retomar tentativa interrompida enquanto aberta e elegível.
 - **RF-059:** identificar falhas/indisponibilidade da IA sem perder histórico.
@@ -94,27 +95,60 @@ Aplicação web educacional para treinamento individual de estações OSCE. Estu
 ## 5. Requisitos não funcionais
 
 - **RNF-001:** autenticação e autorização no backend.
-- **RNF-002:** privacidade entre estudantes.
-- **RNF-003:** ficha configurada é a fonte de verdade clínica.
-- **RNF-004:** avaliação rastreável a mensagens.
-- **RNF-005:** persistir mensagem antes de chamada externa.
+- **RNF-002:** privacidade entre estudantes (isolamento por proprietário).
+- **RNF-003:** ficha configurada é a fonte de verdade clínica (backend controla estado).
+- **RNF-004:** avaliação rastreável a mensagens reais da transcrição.
+- **RNF-005:** persistir mensagem antes de chamada externa (idempotência).
 - **RNF-006:** arquitetura em camadas com módulos coesos.
 - **RNF-007:** testes automatizados para regras e permissões.
-- **RNF-008:** falhas do provedor de IA não corrompem tentativa.
+- **RNF-008:** falhas do provedor de IA não corrompem tentativa (recuperável).
 - **RNF-009:** interface responsiva.
-- **RNF-010:** ações administrativas e mudanças relevantes rastreáveis.
-- **RNF-011:** completude e validação clínica claramente distintas.
+- **RNF-010:** ações administrativas e mudanças relevantes rastreáveis (auditoria).
+- **RNF-011:** completude técnica e validação clínica claramente distintas.
 - **RNF-012:** dados ausentes/não validados não apresentados como fatos.
-- **RNF-016:** limitar e monitorar consumo de IA por usuário.
-- **RNF-017:** impedir duplicação por concorrência.
+- **RNF-013 a RNF-015:** *(lacuna na numeração — ver nota na seção de Procedência e versionamento)*
+- **RNF-016:** limitar e monitorar consumo de IA por usuário e por operação.
+- **RNF-017:** impedir duplicação por concorrência (encerramento, avaliação, liberação de recursos).
 - **RNF-018:** manter registros técnicos suficientes para investigar falhas sem expor dados sensíveis desnecessários.
 - **RNF-019:** aplicar autorização em todas as operações sobre recursos de usuários.
 - **RNF-020:** validar dados clínicos estruturados por schemas antes do uso.
 
 ## 6. Critérios de aceite
 
-Autenticação e perfis; autoria privada; procedência; versões imutáveis; simulação sem invenção; persistência; recuperação sem duplicação; encerramento explícito; avaliação com evidências; isolamento; execução dos dois casos-piloto sem regras de especialidade no código.
+### 6.1 Critérios gerais (MVP)
+
+- Autenticação e perfis (admin/estudante) funcionando
+- Autoria privada: estudante só acessa estações próprias
+- Procedência registrada: `tipo_origem`, referência, responsável, data por versão
+- Versões imutáveis: `publicada`/`substituida` não editáveis; tentativas preservam versão exata
+- Simulação sem invenção: IA não cria dados clínicos; backend controla liberação
+- Persistência: mensagem salva antes de chamada externa; falha de IA não corrompe tentativa
+- Recuperação sem duplicação: retomada `abandonada` → `em_andamento` com idempotência
+- Encerramento explícito: apenas comando do estudante encerra; bloqueia novas mensagens
+- Avaliação com evidências: cada critério tem `referencias_evidencias` para mensagens reais
+- Isolamento: zero vazamento de dados entre estudantes
+- Arquitetura suporta estações de diferentes especialidades **sem regras específicas no código**
+- **Nota:** A execução de cada caso-piloto depende de sua documentação completa e validação clínica. Síndrome Coronariana tem limitação técnica conhecida (ECG); Tuberculose Pediátrica tem dados clínicos pendentes. Não afirmar que ambos estão executáveis atualmente.
+
+### 6.2 Cenários de teste específicos (para orientar implementação)
+
+| Área | Cenários de teste |
+|------|-------------------|
+| **Isolamento entre usuários** | Estudante A não lista/edita/visualiza estações de B; tentativas de A não aparecem para B; avaliações isoladas |
+| **Controle de acesso à ficha confidencial** | Apenas backend/IA acessa `CasoClinico` completo; estudante nunca recebe ficha; rubrica não vazada durante simulação |
+| **Versionamento de estações** | Editar estação `publicada` → cria nova versão; versão anterior `substituida` preservada; tentativa em versão antiga ainda acessível; nova tentativa usa versão `publicada` |
+| **Persistência e retomada de tentativas** | Mensagens persistidas sequencialmente; `abandonada` após timeout → retomada dentro da janela → continua com mesmo `tentativa_id`; fora da janela → `arquivada` sem avaliação |
+| **Solicitação de exames e recursos** | Solicitação ambígua → negação com motivo; recurso liberado → `RecursoSolicitado.status = liberado` com dados; retry mesma solicitação → não duplica liberação (idempotência) |
+| **Respostas inválidas da IA** | `ValidadorResposta` rejeita → fallback controlado; mensagem do estudante já persistida; tentativa não corrompida; log de erro técnico |
+| **Falhas de conexão e timeouts** | Timeout em `SimuladorPaciente` → tentativa `em_andamento` mantida; usuário pode retry manual; `InterpretadorIntencao` timeout → mesmo comportamento |
+| **Duplicidade de mensagens e solicitações** | Mesmo `sequencia_mensagem` reenviado → idempotência retorna resultado anterior; encerramento concorrente → lock previne duplicação |
+| **Avaliação baseada em evidências da conversa** | Cada `ResultadoCriterio` tem `referencias_evidencias` válidos (IDs de mensagens existentes); `nao_avaliavel` só por limitação técnica conhecida; sem notas numéricas |
+| **Critérios não avaliáveis por ausência de dados** | C06–C08 coronariana → `nao_avaliavel` com justificativa "ausência de ECG gráfico validado"; não conta como falha da estudante |
+
+> **Nota:** Critérios clínicos específicos (pesos, notas de aprovação) **não são definidos** nas fontes e não devem ser inventados. A avaliação é qualitativa (RB-035, RB-040).
 
 ## 7. Rastreabilidade
 
-Os identificadores RF-037 a RF-051 não foram redefinidos nesta revisão. A sequência RF-052 a RF-060 foi preservada conforme a proposta recebida.
+Os identificadores **RF-037 a RF-051** e **RNF-013 a RNF-015** não estão definidos na versão atual. O histórico do repositório não contém versões anteriores da documentação (consolidada no commit `6247687`). Não foi possível determinar se correspondem a requisitos removidos, renumerados ou esquecidos. As lacunas são mantidas documentadas sem preenchimento. A sequência RF-052 a RF-060 e RNF-016 a RNF-020 foi preservada conforme a proposta recebida.
+
+**Pendência:** confirmar origem das lacunas com a equipe responsável pela especificação anterior, se aplicável.

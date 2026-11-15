@@ -30,20 +30,22 @@ Portanto, esta rubrica adota uma **abordagem qualitativa e formativa**. O objeti
 
 Antes de aplicar a rubrica, é fundamental verificar se os artefatos anteriores (`02-especificacao-estacao-coronariana.md` e `03-ficha-interna-paciente.md`) possuem dados suficientes para sustentar a verificação de cada critério.
 
-| Critério | Informação Necessária | Disponível na Ficha (`03`)? | Situação / Estado |
-| --- | --- | --- | --- |
-| **C01** | Localização ou irradiação da dor | Sim (retroesternal, braço esquerdo, mandíbula) | **Avaliável** |
-| **C02** | Característica em aperto ou opressão | Sim ("aperto forte", "peso") | **Avaliável** |
-| **C03** | Sintomas associados (sudorese, náuseas, dispneia) | Sim (sudorese fria, náuseas) | **Avaliável** |
-| **C04** | Fatores de risco cardiovascular (pelo menos dois) | Sim (HAS, tabagismo ativo) | **Avaliável** |
-| **C05** | Nomear o ECG de 12 derivações | Sim (disponível na sala) | **Avaliável** |
-| **C06** | Identificar supradesnivelamento do ST | Parcial (descrito conceitualmente, sem traçado gráfico real anexado) | **Não avaliável** *(versão textual)* |
-| **C07** | Citar derivações com o achado (DII, DIII, aVF) | Parcial (previsto no gabarito, mas depende de ECG gráfico) | **Não avaliável** *(versão textual)* |
-| **C08** | Topografia (parede inferior) e artéria (CD) | Parcial (depende de ECG gráfico válido) | **Não avaliável** *(versão textual)* |
-| **C09** | Diagnósticos diferenciais (TEP, dissecção, etc.) | Sim (informações restritas condicionadas) | **Avaliável** |
-| **C10** | Solicitar marcadores de necrose miocárdica | Sim (troponina / CK-MB previstos) | **Avaliável** |
+| Critério | Informação Necessária | Disponível na Ficha (`03`)? | Estado de Avaliabilidade | Classificação na Rubrica |
+| --- | --- | --- | --- | --- |
+| **C01** | Localização ou irradiação da dor | Sim (retroesternal, braço esquerdo, mandíbula) | Dados clínicos completos | **Avaliável** |
+| **C02** | Característica em aperto ou opressão | Sim ("aperto forte", "peso") | Dados clínicos completos | **Avaliável** |
+| **C03** | Sintomas associados (sudorese, náuseas, dispneia) | Sim (sudorese fria, náuseas) | Dados clínicos completos | **Avaliável** |
+| **C04** | Fatores de risco cardiovascular (pelo menos dois) | Sim (HAS, tabagismo ativo) | Dados clínicos completos | **Avaliável** |
+| **C05** | Nomear o ECG de 12 derivações | Sim (disponível na sala) | Dado documentado no cenário | **Avaliável** |
+| **C06** | Identificar supradesnivelamento do ST | Conceitualmente descrito; **sem traçado gráfico validado** | Limitação técnica (ausência de ECG gráfico) | **Não avaliável** |
+| **C07** | Citar derivações com o achado (DII, DIII, aVF) | Conceitualmente descrito; **sem traçado gráfico validado** | Limitação técnica (ausência de ECG gráfico) | **Não avaliável** |
+| **C08** | Topografia (parede inferior) e artéria (CD) | Conceitualmente descrito; **sem traçado gráfico validado** | Limitação técnica (ausência de ECG gráfico) | **Não avaliável** |
+| **C09** | Diagnósticos diferenciais (TEP, dissecção, etc.) | Sim (informações restritas condicionadas) | Dados clínicos completos | **Avaliável** |
+| **C10** | Solicitar marcadores de necrose miocárdica | Sim (troponina / CK-MB previstos) | Dados clínicos completos | **Avaliável** |
 
-*Nota Crítica:* Como a versão atual do chat baseia-se em interações textuais e **não dispõe** de um traçado real de eletrocardiograma gráfico devidamente validado, os critérios **C06, C07 e C08** serão marcados institucionalmente como **Não avaliáveis** nesta rodada de testes, preservando a estudante de penalizações indevidas por limitações técnicas do sistema.
+> **Nota sobre C06–C08:** A coluna "Disponível na Ficha (`03`)?" reflete se a ficha interna contém a *descrição conceitual* do achado esperado. A coluna "Estado de Avaliabilidade" explica por que, na versão textual atual do simulador, esses critérios **não podem ser avaliados**: falta o suporte gráfico do traçado de ECG. A classificação final na rubrica é **Não avaliável** por limitação técnica, não por deficiência clínica da estação.
+
+*Nota Crítica:* Como a versão atual do chat baseia-se em interações textuais e **não dispõe** de um traçado real de eletrocardiograma gráfico devidamente validado, os critérios **C06, C07 e C08** são classificados como **Não avaliáveis** nesta versão, preservando a estudante de penalizações indevidas por limitações técnicas do sistema.
 
 **Política adotada para o ECG (Opção A):** O simulador não fornece laudo interpretativo nem representação gráfica do traçado. Informa apenas que o eletrocardiograma está disponível na sala. C06, C07 e C08 permanecem **Não Avaliáveis** até que um traçado gráfico validado seja integrado ao ambiente de simulação. A ficha interna (`03`, §15) foi alinhada a esta política.
 
